@@ -2,11 +2,10 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
-import React, { useState } from 'react';
+import { Loader2, Search } from 'lucide-react';
+import React, { useState, useTransition } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { getRandomGitHubIssue } from '@/lib/data';
 import { useRouter } from 'next/navigation';
 
 const FAMOUS_REPOS_PLACEHOLDERS = [
@@ -37,10 +36,11 @@ export default function SearchInput() {
   const [error, setError] = useState<string | null>(null);
   const placeholder = useRandomPlaceholder();
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const issue = await getRandomGitHubIssue(searchInput);
+    if (isPending) return
 
     const regexIssue = /^[a-zA-Z0-9-]+\/[a-zA-Z0-9-_.]+$/;
     if (!regexIssue.test(searchInput)) {
@@ -48,9 +48,9 @@ export default function SearchInput() {
       return;
     }
 
-    if (issue) {
+    startTransition(() => {
       router.push(`/${searchInput}`);
-    }
+    })
   }
 
   return (
@@ -63,12 +63,12 @@ export default function SearchInput() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.15 } }}
           >
-            <Button type="submit" className={cn(
+            <Button type="submit" disabled={isPending} className={cn(
               'absolute right-1 top-1/2 -translate-y-1/2 h-10',
               !searchInput ? 'rounded-lg' : 'rounded-l-none rounded-r-lg'
             )} size="icon">
               <span className='sr-only'>Search</span>
-              <Search className='size-4' />
+              {isPending ? <Loader2 className='size-4 animate-spin' /> : <Search className='size-4' />}
             </Button>
           </motion.div>
         )}
