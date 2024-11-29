@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2, Search } from 'lucide-react';
-import React, { useState, useTransition } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
@@ -25,12 +25,53 @@ const FAMOUS_REPOS_PLACEHOLDERS = [
   // 🤍 Feel free to open issues to add your favorite repos here!
 ]
 
+const PLACEHOLDER_INTERVAL = 3200 // 3.2 seconds
+
 const useRandomPlaceholder = () => {
-  const [placeholder] = useState(() => {
-    return FAMOUS_REPOS_PLACEHOLDERS[Math.floor(Math.random() * FAMOUS_REPOS_PLACEHOLDERS.length)];
-  });
+  const [placeholder, setPlaceholder] = useState<string | null>(null);
+  const [lastIndex, setLastIndex] = useState<number>(-1);
+
+  useEffect(() => {
+    const getRandomIndex = (exclude: number) => {
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * FAMOUS_REPOS_PLACEHOLDERS.length);
+      } while (newIndex === exclude);
+      return newIndex;
+    };
+
+    const initialIndex = getRandomIndex(-1);
+    setLastIndex(initialIndex);
+    setPlaceholder(FAMOUS_REPOS_PLACEHOLDERS[initialIndex]);
+
+    const interval = setInterval(() => {
+      const newIndex = getRandomIndex(lastIndex);
+      setLastIndex(newIndex);
+      setPlaceholder(FAMOUS_REPOS_PLACEHOLDERS[newIndex]);
+    }, PLACEHOLDER_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [lastIndex]);
+
   return placeholder;
 }
+
+const AnimatedPlaceholder = ({ text }: { text: string | null }) => (
+  <AnimatePresence mode="wait">
+    {text && (
+      <motion.span
+        key={text}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.2 }}
+        className="absolute left-3 text-sm top-2.5 text-neutral-500 pointer-events-none"
+      >
+        e.g. {text}
+      </motion.span>
+    )}
+  </AnimatePresence>
+);
 
 export default function SearchInput() {
   const [searchInput, setSearchInput] = useState("");
@@ -56,7 +97,14 @@ export default function SearchInput() {
 
   return (
     <form className='flex items-center gap-x-2 w-full relative' onSubmit={handleSubmit}>
-      <Input placeholder={`e.g. ${placeholder}`} className='w-full ring-none focus-visible:ring-offset-0' value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+      <div className="relative w-full">
+        <Input
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          className='w-full ring-none focus-visible:ring-offset-0'
+        />
+        {!searchInput && placeholder !== null && <AnimatedPlaceholder text={placeholder} />}
+      </div>
       <AnimatePresence>
         {searchInput && (
           <motion.div
@@ -78,3 +126,4 @@ export default function SearchInput() {
     </form>
   )
 }
+
