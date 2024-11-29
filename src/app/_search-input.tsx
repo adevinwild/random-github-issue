@@ -22,6 +22,7 @@ const FAMOUS_REPOS_PLACEHOLDERS = [
   "prisma/prisma",
   "trpc/trpc",
   "remix-run/remix"
+  // 🤍 Feel free to open issues to add your favorite repos here!
 ]
 
 const useRandomPlaceholder = () => {
