@@ -15,9 +15,27 @@ type GitHubIssue = {
   }
 }
 
-export const getRandomGitHubIssue = cache(async (repo: string): Promise<GitHubIssue | null> => {
+import { Redis } from '@upstash/redis'
+
+const redis = new Redis({
+  url: process.env.REDIS_URL,
+  token: process.env.REDIS_TOKEN,
+})
+
+
+
+export const getRandomGitHubIssue = cache(async (repo: string): Promise<{ issue: GitHubIssue, expiresAt: number } | null> => {
   if (!repo) {
     throw new Error('Repository is required')
+  }
+
+  const cachedIssue = await redis.get(`issue:${repo}`) as GitHubIssue | null
+  const expiresAt = await redis.ttl(`issue:${repo}`)
+  if (cachedIssue) {
+    return {
+      issue: cachedIssue,
+      expiresAt
+    }
   }
 
   try {
@@ -39,7 +57,12 @@ export const getRandomGitHubIssue = cache(async (repo: string): Promise<GitHubIs
       return null
     }
 
-    return issues[Math.floor(Math.random() * issues.length)]
+    const randomIssue = issues[Math.floor(Math.random() * issues.length)]
+    await redis.set(`issue:${repo}`, JSON.stringify(randomIssue), { ex: 86400 })
+    return {
+      issue: randomIssue,
+      expiresAt: 86400
+    }
   } catch (error) {
     console.error('Error fetching GitHub issue:', error)
     throw error
