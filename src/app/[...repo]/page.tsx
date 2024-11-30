@@ -10,6 +10,7 @@ import { formatDistanceToNow } from 'date-fns';
 
 import SearchInput from "../_search-input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import Footer from "../_footer";
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 86400
@@ -99,15 +100,9 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
               <AlertDescription>Please make sure the repository exists, is public, and has at least one opened issue.</AlertDescription>
             </Alert>
           )}
-
-
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <p className="text-sm text-neutral-400">
-          Based on this <Link href="https://x.com/peer_rich/status/1862609684768649570" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-neutral-700">tweet</Link>,{" "}
-          made by <Link href="https://x.com/adevinwild" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-neutral-700">adevinwild</Link>
-        </p>
-      </footer>
+
+      <Footer />
     </div>
   );
 }
