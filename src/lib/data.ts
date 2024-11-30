@@ -23,7 +23,13 @@ const redis = new Redis({
   token: process.env.REDIS_TOKEN,
 })
 
-
+function getSecondsUntilMidnight(): number {
+  const now = new Date()
+  const tomorrow = new Date(now)
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  tomorrow.setHours(0, 0, 0, 0)
+  return Math.floor((tomorrow.getTime() - now.getTime()) / 1000)
+}
 
 export const getRandomGitHubIssue = cache(async (repo: string): Promise<{ issue: GitHubIssue, expiresAt: number } | null> => {
   if (!repo) {
@@ -59,10 +65,11 @@ export const getRandomGitHubIssue = cache(async (repo: string): Promise<{ issue:
     }
 
     const randomIssue = issues[Math.floor(Math.random() * issues.length)]
-    await redis.set(`issue:${repo}`, JSON.stringify(randomIssue), { ex: 86400 })
+    const ttl = getSecondsUntilMidnight()
+    await redis.set(`issue:${repo}`, JSON.stringify(randomIssue), { ex: ttl })
     return {
       issue: randomIssue,
-      expiresAt: 86400
+      expiresAt: ttl
     }
   } catch (error) {
     console.error('Error fetching GitHub issue:', error)
