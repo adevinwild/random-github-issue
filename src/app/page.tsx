@@ -18,9 +18,9 @@ export default async function Home() {
         <SearchInput />
         <hr className="w-full border-neutral-200 -my-4" />
         <h3 className="text-lg font-medium">Most searched</h3>
-        <div className="flex flex-col gap-2 w-full -mt-6">
+        <div className="grid w-full -mt-6">
           {sortedByScore.map(({ repo, repoMetadata }) => (
-            <article key={repo} className="flex items-center justify-between gap-2 w-full py-2">
+            <article key={repo} className="flex items-center justify-between gap-2 w-full py-0.5">
               <Link
                 href={`/${repo}`}
                 className="hover:underline"
