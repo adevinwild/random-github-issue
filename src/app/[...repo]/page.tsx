@@ -11,6 +11,7 @@ import { formatDistanceToNow } from 'date-fns';
 import SearchInput from "../_search-input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import Footer from "../_footer";
+import Header from "../_header";
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 86400
@@ -26,15 +27,7 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Link href="/" className="flex items-center gap-2 w-full">
-          <GithubIcon />
-          <div className="flex flex-col gap-0.5">
-            <h1 className="text-2xl font-bold">Random GitHub Issue</h1>
-            <p className="text-sm text-neutral-500">
-              A random opened GitHub issue per day for any repository.
-            </p>
-          </div>
-        </Link>
+        <Header />
         <SearchInput />
         <hr className="w-full" />
         {expiresAt && (
