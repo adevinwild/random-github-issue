@@ -80,7 +80,7 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
                     <span className="text-neutral-500">#{issue?.number}</span> opened by
                   </span>
                   <Link href={`https://github.com/${issue?.user.login}`} rel="noopener noreferrer" target="_blank" className="flex items-center gap-1 underline text-blue-500 hover:-translate-y-0.5 transition-transform duration-200">
-                    <Avatar className="size-6 border rounded-full">
+                    <Avatar className="size-6 border rounded-full overflow-hidden">
                       <AvatarImage src={issue?.user.avatar_url} alt={issue?.user.login} />
                       <AvatarFallback>{issue?.user.login.slice(0, 2)}</AvatarFallback>
                     </Avatar>
