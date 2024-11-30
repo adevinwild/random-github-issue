@@ -116,7 +116,7 @@ export default function SearchInput() {
               exit={{ opacity: 0, transition: { duration: 0.15 } }}
             >
               <Button type="submit" disabled={isPending} className={cn(
-                'absolute flex right-2 top-1/2 -translate-y-1/2 h-10',
+                'absolute md:flex hidden right-2 top-1/2 -translate-y-1/2 h-10',
                 !searchInput ? 'rounded-lg' : 'rounded-l-none rounded-r'
               )} size="icon">
                 <span className='sr-only'>Search</span>
