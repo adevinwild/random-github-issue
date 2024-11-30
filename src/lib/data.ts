@@ -31,13 +31,24 @@ function getSecondsUntilMidnight(): number {
   return Math.floor((tomorrow.getTime() - now.getTime()) / 1000)
 }
 
-export const getRandomGitHubIssue = cache(async (repo: string): Promise<{ issue: GitHubIssue, expiresAt: number } | null> => {
+type MinimalGitHubIssue = {
+  title: string
+  html_url: string
+  body?: string
+  number: number
+  user: {
+    login: string
+    avatar_url: string
+  }
+}
+
+export const getRandomGitHubIssue = cache(async (repo: string): Promise<{ issue: MinimalGitHubIssue, expiresAt: number } | null> => {
   if (!repo) {
     throw new Error('Repository is required')
   }
 
-  const cachedIssue = await redis.get(`issue:${repo}`) as GitHubIssue | null
-  const expiresAt = await redis.ttl(`issue:${repo}`)
+  const cachedIssue = await redis.get(`gh:${repo}`) as MinimalGitHubIssue | null
+  const expiresAt = await redis.ttl(`gh:${repo}`)
   if (cachedIssue) {
     return {
       issue: cachedIssue,
@@ -51,7 +62,7 @@ export const getRandomGitHubIssue = cache(async (repo: string): Promise<{ issue:
         'Accept': 'application/vnd.github.v3+json',
         'Authorization': `token ${process.env.GITHUB_TOKEN}`
       },
-      next: { revalidate: 86400 } // 1 day cache
+      next: { revalidate: 86400 }
     })
 
     if (!response.ok) {
@@ -64,11 +75,24 @@ export const getRandomGitHubIssue = cache(async (repo: string): Promise<{ issue:
       return null
     }
 
-    const randomIssue = issues[Math.floor(Math.random() * issues.length)]
+    const fullIssue = issues[Math.floor(Math.random() * issues.length)]
+
+    // Only store the fields we need
+    const minimalIssue: MinimalGitHubIssue = {
+      title: fullIssue.title,
+      html_url: fullIssue.html_url,
+      body: fullIssue.body,
+      number: fullIssue.number!,
+      user: {
+        login: fullIssue.user.login,
+        avatar_url: fullIssue.user.avatar_url
+      }
+    }
+
     const ttl = getSecondsUntilMidnight()
-    await redis.set(`issue:${repo}`, JSON.stringify(randomIssue), { ex: ttl })
+    await redis.set(`gh:${repo}`, JSON.stringify(minimalIssue), { ex: ttl })
     return {
-      issue: randomIssue,
+      issue: minimalIssue,
       expiresAt: ttl
     }
   } catch (error) {
