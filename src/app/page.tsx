@@ -17,7 +17,7 @@ export default async function Home() {
         <Header />
         <SearchInput />
         <hr className="w-full border-neutral-200 -my-4" />
-        <h3 className="text-lg font-medium">Most searched</h3>
+        <h3 className="text-lg font-medium mr-auto">Most searched</h3>
         <div className="grid w-full -mt-6">
           {sortedByScore.map(({ repo, repoMetadata }) => (
             <article key={repo} className="flex items-center justify-between gap-2 w-full py-0.5">
