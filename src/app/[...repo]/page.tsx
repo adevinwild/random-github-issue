@@ -53,21 +53,29 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
 
         {issue
           ? (
-            <Card className="w-full max-w-2xl min-w-[42rem]">
+            <Card className="w-full max-w-[calc(100dvw-4rem)] md:max-w-2xl md:min-w-[42rem]">
               <CardHeader>
                 <div className="flex items-center gap-1 justify-between mb-3">
                   <Link href={`https://github.com/${org}/${repo}`}>
                     <CardDescription className="text-blue-500 underline">@{org}/{repo}</CardDescription>
                   </Link>
-                  <Button variant="outline" asChild size="sm">
+                  <Button variant="outline" asChild size="sm" className="hidden md:flex">
                     <Link href={`https://github.com/${org}/${repo}/issues/${issue?.number}`}>
-                      View on GitHub <ExternalLink className="size-4" />
+                      <span>View on GitHub</span>
+                      <ExternalLink className="size-4" />
                     </Link>
                   </Button>
                 </div>
-                <CardTitle className="my-1 pb-1">{issue?.title}</CardTitle>
+                <Link href={`https://github.com/${org}/${repo}/issues/${issue?.number}`}>
+                  <CardTitle className="my-1 pb-1 underline text-blue-500 text-wrap break-words flex items-center gap-2">
+                    <span>
+                      {issue?.title}{' '}
+                    </span>
+                    <ExternalLink className="size-4 shrink-0 md:hidden" />
+                  </CardTitle>
+                </Link>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-auto">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
@@ -75,11 +83,15 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
                     p: ({ node, ...props }) => <p className="mb-4" {...props} />,
                     ul: ({ node, ...props }) => <ul className="list-disc list-inside mb-4" {...props} />,
                     ol: ({ node, ...props }) => <ol className="list-decimal list-inside mb-4" {...props} />,
-                    h1: ({ node, ...props }) => <h1 className="text-2xl font-bold mb-2" {...props} />,
-                    h2: ({ node, ...props }) => <h2 className="text-xl font-bold mb-2" {...props} />,
-                    h3: ({ node, ...props }) => <h3 className="text-lg font-bold mb-2" {...props} />,
+                    h1: ({ node, ...props }) => <h1 className="text-xl md:text-2xl font-bold mb-2" {...props} />,
+                    h2: ({ node, ...props }) => <h2 className="text-lg md:text-xl font-bold mb-2" {...props} />,
+                    h3: ({ node, ...props }) => <h3 className="text-base md:text-lg font-bold mb-2" {...props} />,
                     code: ({ node, ...props }) =>
-                      <code className="bg-gray-100 rounded px-1" {...props} />
+                      <code className="bg-gray-100 font-mono text-sm md:text-base" {...props} />,
+                    blockquote: ({ node, ...props }) =>
+                      <blockquote className="bg-gray-100 font-mono text-sm md:text-base ring-1 ring-neutral-200 p-4 rounded mb-4" {...props} />,
+                    pre: ({ node, ...props }) =>
+                      <pre className="bg-gray-100 font-mono overflow-auto text-sm md:text-base ring-1 ring-neutral-200 p-4 rounded mb-4" {...props} />
                   }}
                 >
                   {issue?.body ?? "No description was found for this issue."}
