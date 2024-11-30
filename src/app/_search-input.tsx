@@ -68,7 +68,7 @@ const AnimatedPlaceholder = ({ text }: { text: string | null }) => (
         className="text-sm text-neutral-500 pointer-events-none"
       >
         <span className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-3 md:translate-x-0 text-nowrap whitespace-nowrap'>
-          {text}
+          e.g. {text}
         </span>
       </motion.span>
     )}
@@ -103,7 +103,7 @@ export default function SearchInput() {
         <Input
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className='w-full ring-none border-none shadow-none focus-visible:ring-offset-0 focus-visible:ring-1 text-center md:text-left'
+          className='w-full ring-none border-none shadow-none ring-1 ring-neutral-200 duration-300 focus-visible:ring-offset-0 focus-visible:ring-1 text-center md:text-left'
         />
         {!searchInput && placeholder !== null && <AnimatedPlaceholder text={placeholder} />}
       </div>

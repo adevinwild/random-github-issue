@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getRandomGitHubIssue } from "@/lib/data";
-import { Clock, ExternalLink, GithubIcon, Frown, X } from 'lucide-react';
+import { Clock, ExternalLink, Frown } from 'lucide-react';
 import Link from "next/link";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
