@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getRandomGitHubIssue } from "@/lib/data";
-import { Clock, ExternalLink, GithubIcon, Terminal } from 'lucide-react';
+import { Clock, ExternalLink, GithubIcon, Frown, X } from 'lucide-react';
 import Link from "next/link";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -36,19 +36,22 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
         </Link>
         <SearchInput />
         <hr className="w-full" />
-
         {expiresAt && (
-          <Alert>
+          <Alert variant="info">
             <Clock className="size-4" />
             <AlertTitle>Heads up!</AlertTitle>
             <AlertDescription>
               {(() => {
                 const now = new Date();
                 const futureDate = new Date(now.getTime() + (expiresAt * 1000));
-                return `A new random issue will be available in ${formatDistanceToNow(futureDate, {
-                  addSuffix: false,
-                  includeSeconds: false
-                })}`;
+                return (
+                  <p>
+                    A new random issue will be available in <span className="font-medium">{formatDistanceToNow(futureDate, {
+                      addSuffix: false,
+                      includeSeconds: false
+                    })}</span> for <span className="font-medium">{`@${org}/${repo}`}</span>
+                  </p>
+                );
               })()}
             </AlertDescription>
           </Alert>
@@ -90,7 +93,11 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
               </CardContent>
             </Card>
           ) : (
-            <p className="text-sm text-neutral-500">No issue found for this repository. Please make sure the repository exists and is public.</p>
+            <Alert variant="destructive">
+              <Frown className="size-4" />
+              <AlertTitle>No issue found</AlertTitle>
+              <AlertDescription>Please make sure the repository exists, is public, and has at least one opened issue.</AlertDescription>
+            </Alert>
           )}
 
 
