@@ -12,6 +12,7 @@ import SearchInput from "../_search-input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import Footer from "../_footer";
 import Header from "../_header";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 86400
@@ -31,7 +32,7 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
         <SearchInput />
         <hr className="w-full" />
         {expiresAt && (
-          <Alert variant="expires">
+          <Alert variant="expires" className="text-balance">
             <Clock className="size-4" />
             <AlertTitle>Heads up!</AlertTitle>
             <AlertDescription>
@@ -66,16 +67,30 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
                     </Link>
                   </Button>
                 </div>
-                <Link href={`https://github.com/${org}/${repo}/issues/${issue?.number}`}>
-                  <CardTitle className="my-1 pb-1 underline text-blue-500 text-wrap break-words flex items-center gap-2">
+                <Link href={`https://github.com/${org}/${repo}/issues/${issue?.number}`} rel="noopener noreferrer" target="_blank" className="text-wrap break-words flex items-center gap-2">
+                  <CardTitle className="my-1 pb-1 underline text-blue-500 flex items-center gap-2">
                     <span>
                       {issue?.title}{' '}
                     </span>
                     <ExternalLink className="size-4 shrink-0 md:hidden" />
                   </CardTitle>
                 </Link>
+                <div className="flex items-center gap-1">
+                  <span className="text-sm text-neutral-400">
+                    <span className="text-neutral-500">#{issue?.number}</span> opened by
+                  </span>
+                  <Link href={`https://github.com/${issue?.user.login}`} rel="noopener noreferrer" target="_blank" className="flex items-center gap-1 underline text-blue-500 hover:-translate-y-0.5 transition-transform duration-200">
+                    <Avatar className="size-6 border rounded-full">
+                      <AvatarImage src={issue?.user.avatar_url} alt={issue?.user.login} />
+                      <AvatarFallback>{issue?.user.login.slice(0, 2)}</AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm">
+                      {issue?.user.login}
+                    </span>
+                  </Link>
+                </div>
               </CardHeader>
-              <CardContent className="overflow-auto">
+              <CardContent className="overflow-auto border-t pt-4">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
