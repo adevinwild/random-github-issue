@@ -38,7 +38,7 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
         <SearchInput />
         <hr className="w-full" />
         {expiresAt && (
-          <Alert variant="info">
+          <Alert variant="expires">
             <Clock className="size-4" />
             <AlertTitle>Heads up!</AlertTitle>
             <AlertDescription>
