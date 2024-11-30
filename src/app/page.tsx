@@ -10,7 +10,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 export default async function Home() {
   const trendingRepos = await getTrendingRepos()
   const sortedByScore = trendingRepos.sort((a, b) => b.searchCount - a.searchCount)
-  console.log(sortedByScore)
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
