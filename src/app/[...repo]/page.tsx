@@ -12,7 +12,7 @@ import { Metadata } from 'next';
 import SearchInput from "../_search-input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import Footer from "../_footer";
-import Header from "../_header";
+import Header from "../../components/header";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Loading from "./loading";
 

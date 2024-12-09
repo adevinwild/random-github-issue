@@ -1,6 +1,6 @@
 "use client"
 
-import Header from '../_header'
+import Header from '../../components/header'
 import Footer from '../_footer'
 import { Loader2 } from 'lucide-react'
 

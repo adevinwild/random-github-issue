@@ -1,6 +1,6 @@
 import SearchInput from "./_search-input";
 import Footer from "./_footer";
-import Header from "./_header";
+import Header from "../components/header";
 import { getTrendingRepos } from "@/lib/data";
 import Link from "next/link";
 import { ExternalLink, Star, Users } from "lucide-react";

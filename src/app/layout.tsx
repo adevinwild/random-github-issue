@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/react"
 import localFont from "next/font/local";
 import "./globals.css";
 import { ModeToggle, ThemeProvider } from "./_theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -39,6 +40,7 @@ export default function RootLayout({
         >
           <ModeToggle />
           <Analytics />
+          <Toaster />
           {children}
         </ThemeProvider>
       </body>
