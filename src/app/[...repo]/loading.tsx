@@ -6,10 +6,14 @@ import { Loader2 } from 'lucide-react'
 
 export default function Loading() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Header />
-        <div className='w-full h-full flex items-center justify-center'>
+    <div className="min-h-dvh p-10 sm:p-20 md:max-w-screen-lg mx-auto flex flex-col gap-4">
+      <Header />
+      <main
+        className="flex flex-col gap-8 row-start-2 items-center sm:items-start w-full"
+        role="main"
+        aria-labelledby="main-heading"
+      >
+        <div className='w-full h-full flex items-center justify-center min-h-[20rem]'>
           <Loader2 className='size-6 animate-spin' />
         </div>
       </main>
