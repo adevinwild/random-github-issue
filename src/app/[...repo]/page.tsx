@@ -117,11 +117,11 @@ export default async function IssuePage({ params }: { params: { repo: string[] }
                     h2: ({ node, ...props }) => <h2 className="text-lg md:text-xl font-bold mb-2" {...props} />,
                     h3: ({ node, ...props }) => <h3 className="text-base md:text-lg font-bold mb-2" {...props} />,
                     code: ({ node, ...props }) =>
-                      <code className="bg-gray-100 font-mono text-sm md:text-base" {...props} />,
+                      <code className="bg-neutral-100 dark:bg-neutral-900 font-mono text-sm md:text-base" {...props} />,
                     blockquote: ({ node, ...props }) =>
-                      <blockquote className="bg-gray-100 font-mono text-sm md:text-base ring-1 ring-neutral-200 p-4 rounded mb-4" {...props} />,
+                      <blockquote className="bg-neutral-100 dark:bg-neutral-900 font-mono text-sm md:text-base ring-1 ring-neutral-200 dark:ring-neutral-800 p-4 rounded mb-4" {...props} />,
                     pre: ({ node, ...props }) =>
-                      <pre className="bg-gray-100 font-mono overflow-auto text-sm md:text-base ring-1 ring-neutral-200 p-4 rounded mb-4" {...props} />,
+                      <pre className="bg-neutral-100 font-mono overflow-auto text-sm md:text-base ring-1 ring-neutral-200 p-4 rounded mb-4" {...props} />,
                     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
                     img: ({ node, ...props }) => <img className="w-full rounded-sm" {...props} />,
                   }}
